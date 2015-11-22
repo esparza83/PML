@@ -106,7 +106,7 @@ testData  &lt;- training[-trainIndex,]</code></pre>
 <pre class="r"><code># Using the rfe funtion from the caract package, with 10 cv we obtained the optimum number of features: 52 variables are important
 control &lt;- rfeControl(functions=rfFuncs, method=&quot;cv&quot;, number=10)
 model.rfe &lt;- rfe(trainData[,-53], trainData[,53], sizes=c(1:8), rfeControl=control)
-model.rfe</code></pre>
+print(model.rfe)</code></pre>
 <pre><code>## 
 ## Recursive feature selection
 ## 
@@ -115,15 +115,15 @@ model.rfe</code></pre>
 ## Resampling performance over subset size:
 ## 
 ##  Variables Accuracy  Kappa AccuracySD  KappaSD Selected
-##          1   0.4964 0.3471   0.015683 0.020114         
-##          2   0.7237 0.6497   0.011021 0.014139         
-##          3   0.8889 0.8594   0.010804 0.013738         
-##          4   0.9382 0.9218   0.008996 0.011392         
-##          5   0.9599 0.9493   0.004176 0.005286         
-##          6   0.9741 0.9672   0.003373 0.004266         
-##          7   0.9785 0.9728   0.004671 0.005909         
-##          8   0.9781 0.9723   0.006380 0.008069         
-##         52   0.9914 0.9892   0.002545 0.003221        *
+##          1   0.4996 0.3532   0.022555 0.031440         
+##          2   0.7290 0.6566   0.011390 0.014697         
+##          3   0.8880 0.8583   0.011426 0.014534         
+##          4   0.9399 0.9239   0.006657 0.008405         
+##          5   0.9645 0.9551   0.004095 0.005174         
+##          6   0.9762 0.9699   0.002748 0.003476         
+##          7   0.9766 0.9704   0.002444 0.003091         
+##          8   0.9807 0.9756   0.004448 0.005627         
+##         52   0.9925 0.9905   0.002256 0.002853        *
 ## 
 ## The top 5 variables (out of 52):
 ##    roll_belt, yaw_belt, magnet_dumbbell_z, pitch_belt, magnet_dumbbell_y</code></pre>
@@ -136,18 +136,18 @@ Ctrl = trainControl(method = &quot;repeatedcv&quot;,number = 10, repeats = 3, cl
 newGrid = expand.grid(mtry = c(2,4,8,15))
 model = train(classe ~ ., data = trainData, trControl = Ctrl, method = &quot;rf&quot;, tuneGrid = newGrid)
 #After doing cross-validation and repeat 3 times. The optimal value of the mtry is 8.
- model$results</code></pre>
+ print(model$results)</code></pre>
 <pre><code>##   mtry  Accuracy     Kappa  AccuracySD     KappaSD
-## 1    2 0.9892436 0.9863920 0.003242871 0.004103235
-## 2    4 0.9911120 0.9887565 0.002997163 0.003791234
-## 3    8 0.9921312 0.9900464 0.002862950 0.003620940
-## 4   15 0.9916498 0.9894371 0.002542998 0.003216447</code></pre>
+## 1    2 0.9906597 0.9881840 0.002800013 0.003542900
+## 2    4 0.9921315 0.9900460 0.003030622 0.003834807
+## 3    8 0.9929522 0.9910845 0.002493279 0.003154469
+## 4   15 0.9919895 0.9898667 0.002376818 0.003007048</code></pre>
 <pre class="r"><code> #The optimal value of mtry is 8.
- model$bestTune</code></pre>
+ print(model$bestTune)</code></pre>
 <pre><code>##   mtry
 ## 3    8</code></pre>
 <pre class="r"><code> # OOB of  0.65%
- model$finalModel</code></pre>
+ print(model$finalModel)</code></pre>
 <pre><code>## 
 ## Call:
 ##  randomForest(x = x, y = y, mtry = param$mtry) 
@@ -157,12 +157,12 @@ model = train(classe ~ ., data = trainData, trControl = Ctrl, method = &quot;rf&
 ## 
 ##         OOB estimate of  error rate: 0.62%
 ## Confusion matrix:
-##      A    B    C    D    E  class.error
-## A 3345    1    1    0    1 0.0008960573
-## B   12 2259    8    0    0 0.0087757789
-## C    0   12 2036    6    0 0.0087633885
-## D    0    0   19 1907    4 0.0119170984
-## E    0    0    1    8 2156 0.0041570439</code></pre>
+##      A    B    C    D    E class.error
+## A 3344    2    1    0    1 0.001194743
+## B   13 2260    6    0    0 0.008336990
+## C    0   17 2036    1    0 0.008763389
+## D    0    0   23 1905    2 0.012953368
+## E    0    1    1    5 2158 0.003233256</code></pre>
 </div>
 <div id="validation" class="section level1">
 <h1>Validation:</h1>
@@ -171,9 +171,9 @@ model.prediction = predict(model, testData)
 #Confusion Matrix  
 model.CM = confusionMatrix(model.prediction ,testData$classe)
 #With an avg accuracy of :
-model.CM$overall</code></pre>
+print(model.CM$overall)</code></pre>
 <pre><code>##       Accuracy          Kappa  AccuracyLower  AccuracyUpper   AccuracyNull 
-##      0.9926077      0.9906490      0.9904541      0.9943821      0.2844762 
+##      0.9913332      0.9890347      0.9890255      0.9932638      0.2844762 
 ## AccuracyPValue  McnemarPValue 
 ##      0.0000000            NaN</code></pre>
 </div>
