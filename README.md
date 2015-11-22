@@ -1,6 +1,7 @@
 ---
-title: "Prediction Assignment - Course Project"
-course: "Practical Machine Learning"
+#title: "Prediction Assignment - Course Project"
+output: html_document
+course: Practical Machine Learning
 ---
 
 The goal of your project is to predict the manner in which they did the exercise. This is the "classe" variable in the training set. You may use any of the other variables to predict with. You should create a report describing how you built your model, how you used cross validation, what you think the expected out of sample error is, and why you made the choices you did. You will also use your prediction model to predict 20 different test cases. 
@@ -37,7 +38,7 @@ testData  <- training[-trainIndex,]
 # Using the rfe funtion from the caract package, with 10 cv we obtained the optimum number of features: 52 variables are important
 control <- rfeControl(functions=rfFuncs, method="cv", number=10)
 model.rfe <- rfe(trainData[,-53], trainData[,53], sizes=c(1:8), rfeControl=control)
-model.rfe
+print(model.rfe)
 #With 52 variables we obtained the higer accuracy
 ```
 
@@ -49,11 +50,11 @@ Ctrl = trainControl(method = "repeatedcv",number = 10, repeats = 3, classProbs =
 newGrid = expand.grid(mtry = c(2,4,8,15))
 model = train(classe ~ ., data = trainData, trControl = Ctrl, method = "rf", tuneGrid = newGrid)
 #After doing cross-validation and repeat 3 times. The optimal value of the mtry is 8.
- model$results
+ print(model$results)
  #The optimal value of mtry is 8.
- model$bestTune
+ print(model$bestTune)
  # OOB of  0.65%
- model$finalModel
+ print(model$finalModel)
 ```
 #Validation:
 ```{r}
@@ -62,7 +63,7 @@ model.prediction = predict(model, testData)
 #Confusion Matrix  
 model.CM = confusionMatrix(model.prediction ,testData$classe)
 #With an avg accuracy of :
-model.CM$overall
+print(model.CM$overall)
 ```
 #Conclusion:
 With 56 features and an Avg accuracy of 99.32% we can conclude that the model could be use to clasify future data
